@@ -1,3 +1,4 @@
 /tailwind/node_modules
 /dist
 .env
+/tmp
