@@ -5,6 +5,7 @@ go 1.23.1
 require (
 	github.com/a-h/templ v0.2.793
 	github.com/aidarkhanov/nanoid v1.0.8
+	github.com/gorilla/websocket v1.5.3
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.13.0
 	gorm.io/driver/postgres v1.5.11
@@ -12,7 +13,6 @@ require (
 )
 
 require (
-	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgx/v5 v5.5.5 // indirect
