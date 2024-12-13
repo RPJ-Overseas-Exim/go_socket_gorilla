@@ -1,38 +1,59 @@
 package main
 
+type Message struct {
+    chatId string
+    msg []byte
+}
+
 type Hub struct {
-    clients map[*Client] bool
-    broadcast chan []byte
-    register chan *Client
-    unregister chan *Client
+    broadcast chan Message
+    register chan *ChatParticipant
+    unregister chan *ChatParticipant
+    chats map[string] *Chat
+}
+
+type Chat struct{
+    cp map[*ChatParticipant]bool
+}
+
+func newChat(cp *ChatParticipant) *Chat{
+    return &Chat{
+        cp: map[*ChatParticipant]bool{cp:true},
+    }
 }
 
 func newHub() *Hub {
     return &Hub{
-        broadcast: make(chan []byte),
-        register: make(chan *Client),
-        unregister: make(chan *Client),
-        clients: make(map[*Client]bool),
+        broadcast: make(chan Message),
+        register: make(chan *ChatParticipant),
+        unregister: make(chan *ChatParticipant),
+        chats: make(map[string] *Chat),
     }
 }
 
 func (h*Hub) run(){
     for {
         select {
-        case client := <-h.register:
-            h.clients[client] = true
-        case client := <-h.unregister:
-            if _,ok := h.clients[client];ok{
-                delete(h.clients, client)
-                close(client.send)
+        case cp := <-h.register:
+            chat, ok := h.chats[cp.chatId] 
+            if !ok {
+                chat = newChat(cp)
+            }else{
+                chat.cp[cp]  =  true
+            }
+
+        case cp := <-h.unregister:
+            if _,ok := h.chats[cp.chatId].cp[cp];ok{
+                delete(h.chats[cp.chatId].cp, cp)
+                close(cp.send)
             }
         case message := <-h.broadcast:
-            for client := range h.clients {
+            for cp := range h.chats[message.chatId]{
                 select {
-                case client.send <- message:
+                case cp.send <- message:
                 default:
-                    close(client.send)
-                    delete(h.clients, client)
+                    close(cp.send)
+                    delete(h.cp, cp)
                 }
             }
         }

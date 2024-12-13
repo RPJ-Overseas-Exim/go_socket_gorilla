@@ -19,9 +19,13 @@ func main(){
     db := db.InitializeDB()
     ms := services.NewMessageService(db)
     mh := handlers.NewMessageHandler(ms)
+    hub := newHub()
 
-    e.GET("/ws", func (c echo.Context) error{
-        serveWs(newHub(), c)
+    go hub.run()
+
+    e.GET("/ws/:chatId", func (c echo.Context) error{
+        chatId := c.Param("chatId")
+        serveWs(chatId, hub, c)
         return nil
     })
 

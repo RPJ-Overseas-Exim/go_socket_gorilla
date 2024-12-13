@@ -9,7 +9,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-
 const (
 
     writeWait = 10 *time.Second
@@ -31,13 +30,15 @@ var upgrader = websocket.Upgrader{
     WriteBufferSize: 1024,
 }
 
-type Client struct {
+type ChatParticipant struct {
     hub *Hub
     conn *websocket.Conn
     send chan []byte
+    userId string
+    chatId string
 }
 
-func (c *Client) readPump() {
+func (c *ChatParticipant) readPump() {
     defer func(){
         c.hub.unregister <- c
         c.conn.Close()
@@ -57,11 +58,11 @@ func (c *Client) readPump() {
 
         message = bytes.TrimSpace(bytes.Replace(message, newLine, space, -1))
 
-        c.hub.broadcast <-message
+        c.hub.broadcast <- message
     }
 }
 
-func (c *Client) writePump(){
+func (c *ChatParticipant) writePump(){
     ticker := time.NewTicker(pingPeriod)
     defer func(){
         ticker.Stop()
@@ -80,6 +81,7 @@ func (c *Client) writePump(){
             if err != nil{
                 return
             }
+
             w.Write(message)
 
             n:= len(c.send)
@@ -92,7 +94,7 @@ func (c *Client) writePump(){
                 return
             }
 
-        case <-ticker.C:
+        case <- ticker.C:
             c.conn.SetWriteDeadline(time.Now().Add(writeWait))
             if err := c.conn.WriteMessage(websocket.PingMessage, nil); err !=nil{
                 return
@@ -101,15 +103,16 @@ func (c *Client) writePump(){
     }
 }
 
-func serveWs(hub *Hub, c echo.Context){
+func serveWs(chatId string, hub *Hub, c echo.Context){
     conn, err := upgrader.Upgrade(c.Response() , c.Request(), nil)
     if err != nil{
         log.Println(err)
         return
     }
 
-    client := &Client{hub:hub, conn:conn, send: make(chan []byte, 256)}
+    client := &ChatParticipant{chatId:chatId, hub:hub, conn:conn, send: make(chan []byte, 256)}
     client.hub.register <- client
     go client.writePump()
     go client.readPump()
 }
+

@@ -7,6 +7,7 @@ type User struct {
     Id string
     Name string
     Email string
+    Number int
     Role string
     Participant []Participant
     Message []Message
