@@ -17,11 +17,12 @@ func main(){
     db := db.InitializeDB()
     ms := services.NewMessageService(db)
     mh := handlers.NewMessageHandler(ms)
+    ah := handlers.NewLoginHandler()
 
     cs := services.NewChatService(db)
     ch := handlers.NewChatHandler(cs)
 
-    handlers.SetupRoutes(e, mh, ch)
+    handlers.SetupRoutes(e, mh, ch, ah)
     e.Logger.Fatal(e.Start(":8181"))
 }
 

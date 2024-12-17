@@ -566,40 +566,17 @@ video {
   right: 2.5rem;
 }
 
-.h-32 {
-  height: 8rem;
-}
-
-.h-\[120px\] {
-  height: 120px;
-}
-
-.h-\[520px\] {
-  height: 520px;
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .h-\[400px\] {
   height: 400px;
 }
 
-.w-64 {
-  width: 16rem;
-}
-
-.w-48 {
-  width: 12rem;
-}
-
-.w-\[60px\] {
-  width: 60px;
-}
-
-.w-\[120px\] {
-  width: 120px;
-}
-
-.w-\[200px\] {
-  width: 200px;
+.w-1\/2 {
+  width: 50%;
 }
 
 .w-\[300px\] {

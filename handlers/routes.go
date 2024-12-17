@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func SetupRoutes(e *echo.Echo, mh *MessageHandler, ch *ChatHandler){
+func SetupRoutes(e *echo.Echo, mh *MessageHandler, ch *ChatHandler, ah *AuthHandler){
     // api routes
 
     e.GET("/", func (c echo.Context) error{
@@ -33,4 +33,10 @@ func SetupRoutes(e *echo.Echo, mh *MessageHandler, ch *ChatHandler){
 
         return nil
     })
+
+    // authentication routes
+
+    e.GET("/login", ah.LoginView)
+    e.POST("/login", ah.LoginHandler)
+    e.POST("/logout", ah.LogoutHandler)
 }
