@@ -27,16 +27,3 @@ func main(){
     handlers.SetupRoutes(e, mh, ch, ah)
     e.Logger.Fatal(e.Start(":8181"))
 }
-
-    // e.GET("/ws", func (c echo.Context) error {
-    //     email := c.QueryParam("email")
-    //
-    //     if email==""{
-    //         he := utils.HTTPException{Message: "Chat Id not given"}
-    //         return &he
-    //     }
-    //
-    //     chatId := cs.GetChatId(email)
-    //     socket.ServeWs(chatId, hub, c)
-    //     return nil
-    // })

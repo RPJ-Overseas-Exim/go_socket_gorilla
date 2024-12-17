@@ -5,16 +5,20 @@ let conn,
     email = document.querySelector(".email")
 
 
-document.querySelector(".text-input").addEventListener("submit", function(e) {
-    e.preventDefault()
-    if(!conn && email){
-        connectToSocket()
-    }
-    if (!msg || !msg.value || !conn || !email) {
-        return
-    }
-    conn.send(msg.value)
-})
+const textInput = document.querySelector(".text-input")
+
+if (textInput) {
+    textInput.addEventListener("submit", function(e) {
+        e.preventDefault()
+        if (!conn && email) {
+            connectToSocket()
+        }
+        if (!msg || !msg.value || !conn || !email) {
+            return
+        }
+        conn.send(msg.value)
+    })
+}
 
 function connectToSocket() {
     if (window["WebSocket"]) {
