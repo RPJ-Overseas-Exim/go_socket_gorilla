@@ -17,7 +17,9 @@ func main(){
     db := db.InitializeDB()
     ms := services.NewMessageService(db)
     mh := handlers.NewMessageHandler(ms)
-    ah := handlers.NewLoginHandler()
+
+    as := services.NewAuthService()
+    ah := handlers.NewAuthHandler(as)
 
     cs := services.NewChatService(db)
     ch := handlers.NewChatHandler(cs)
