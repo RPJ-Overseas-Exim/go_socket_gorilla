@@ -14,13 +14,13 @@ templ Login() {
                     @loginLable("username"){
                         Username: 
                     }
-					@ui.Input(templ.Attributes{"type": "text", "id": "username", "placeholder": "Enter your username"})
+					@ui.Input(templ.Attributes{"type": "text", "id": "username", "placeholder": "Enter your username", "name": "username"})
 				</p>
 				<p class="m-0">
                     @loginLable("password"){
                         Password: 
                     }
-					@ui.Input(templ.Attributes{"type": "password", "id": "password", "placeholder": "Enter your password"})
+					@ui.Input(templ.Attributes{"type": "password", "id": "password", "placeholder": "Enter your password", "name": "password"})
 				</p>
 				@ui.Button(templ.Attributes{"type": "submit"}) {
 					Submit

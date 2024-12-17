@@ -1,2 +1,0 @@
-<input class=\"rounded-lg bg-background border border-border px-2 py-1\"
->
