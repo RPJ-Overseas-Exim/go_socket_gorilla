@@ -43,6 +43,6 @@ func SetupRoutes(e *echo.Echo, mh *MessageHandler, ch *ChatHandler, ah *AuthHand
 
     // admin routes
 
-    e.Use(middlewares.AuthUser)
-    e.GET("/admin", adh.AdminView)
+    adminRoutes := e.Group("/admin", middlewares.AuthUser)
+    adminRoutes.GET("", adh.AdminView)
 }
