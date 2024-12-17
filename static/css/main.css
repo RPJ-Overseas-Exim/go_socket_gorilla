@@ -570,8 +570,40 @@ video {
   height: 8rem;
 }
 
+.h-\[120px\] {
+  height: 120px;
+}
+
+.h-\[520px\] {
+  height: 520px;
+}
+
+.h-\[400px\] {
+  height: 400px;
+}
+
 .w-64 {
   width: 16rem;
+}
+
+.w-48 {
+  width: 12rem;
+}
+
+.w-\[60px\] {
+  width: 60px;
+}
+
+.w-\[120px\] {
+  width: 120px;
+}
+
+.w-\[200px\] {
+  width: 200px;
+}
+
+.w-\[300px\] {
+  width: 300px;
 }
 
 .rounded-lg {
@@ -581,4 +613,8 @@ video {
 .bg-gray-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
+}
+
+.p-4 {
+  padding: 1rem;
 }

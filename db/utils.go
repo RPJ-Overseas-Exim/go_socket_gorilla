@@ -48,8 +48,20 @@ func GenerateNanoid() string {
 // }
 
 func migrateDb(db *gorm.DB){
-    db.AutoMigrate(&models.User{})
-    db.AutoMigrate(&models.Chat{})
-    db.AutoMigrate(&models.Participant{})
+     log.Println("Running migration")
+     db.AutoMigrate(
+         models.SocketUser{},
+         models.Chat{},
+         models.Participant{},
+         models.Message{},
+     )
+     Session := db.Session(&gorm.Session{PrepareStmt: true})
+     if Session != nil {
+         log.Println("Migration successful")
+     }
+    // db.AutoMigrate(&models.Chat{})
+    // db.AutoMigrate(&models.SocketUser{})
+    // db.AutoMigrate(&models.Participant{})
+    // db.AutoMigrate(&models.Message{})
 }
 

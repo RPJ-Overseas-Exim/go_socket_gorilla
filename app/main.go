@@ -9,26 +9,31 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-
 func main(){
     e := echo.New()
     e.Use(middleware.Logger())
     e.Static("/static", "static")
 
-
     db := db.InitializeDB()
     ms := services.NewMessageService(db)
     mh := handlers.NewMessageHandler(ms)
-    hub := newHub()
 
-    go hub.run()
+    cs := services.NewChatService(db)
+    ch := handlers.NewChatHandler(cs)
 
-    e.GET("/ws/:chatId", func (c echo.Context) error{
-        chatId := c.Param("chatId")
-        serveWs(chatId, hub, c)
-        return nil
-    })
-
-    handlers.SetupRoutes(e, mh)
+    handlers.SetupRoutes(e, mh, ch)
     e.Logger.Fatal(e.Start(":8181"))
 }
+
+    // e.GET("/ws", func (c echo.Context) error {
+    //     email := c.QueryParam("email")
+    //
+    //     if email==""{
+    //         he := utils.HTTPException{Message: "Chat Id not given"}
+    //         return &he
+    //     }
+    //
+    //     chatId := cs.GetChatId(email)
+    //     socket.ServeWs(chatId, hub, c)
+    //     return nil
+    // })

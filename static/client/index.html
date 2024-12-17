@@ -35,6 +35,7 @@ window.onload = function () {
             item.innerHTML = "<b>Connection closed.</b>";
             appendLog(item);
         };
+
         conn.onmessage = function (evt) {
             var messages = evt.data.split('\n');
             for (var i = 0; i < messages.length; i++) {

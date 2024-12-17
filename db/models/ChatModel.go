@@ -1,22 +1,20 @@
 package models
 
 import (
-	"time"
+	"RPJ_Overseas_Exim/go_mod_home/utils"
 
 	"gorm.io/gorm"
 )
 
-type Participant struct {
-    gorm.Model
-    Id string 
-    UserId string
-    ChatId string
-    lastSeen time.Time
-}
-
 type Chat struct {
     gorm.Model
-    Id string;
+    Id string `gorm:"primaryKey"`;
     Participant []Participant;
     Message []Message;
+}
+
+func NewChat() *Chat{
+    return &Chat{
+        Id: *utils.GenNanoid(),
+    }
 }

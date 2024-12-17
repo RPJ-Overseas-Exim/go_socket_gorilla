@@ -1,4 +1,4 @@
-package main
+package socket
 
 import (
 	"bytes"
@@ -33,7 +33,7 @@ var upgrader = websocket.Upgrader{
 type ChatParticipant struct {
     hub *Hub
     conn *websocket.Conn
-    send chan []byte
+    messages chan []byte
     userId string
     chatId string
 }
@@ -49,16 +49,18 @@ func (c *ChatParticipant) readPump() {
     c.conn.SetPongHandler(func(string) error { c.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil})
     for {
         _, message, err := c.conn.ReadMessage()
+
         if err != nil{
             if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure){
                 log.Printf("error: %v", err)
             }
+            log.Println("Error while reading message")
             break
         }
 
         message = bytes.TrimSpace(bytes.Replace(message, newLine, space, -1))
 
-        c.hub.broadcast <- message
+        c.hub.broadcast <- NewMessage(c.chatId, c.userId, message)
     }
 }
 
@@ -70,7 +72,7 @@ func (c *ChatParticipant) writePump(){
     }()
     for {
         select {
-        case message, ok := <-c.send:
+        case message, ok := <-c.messages:
             c.conn.SetWriteDeadline(time.Now().Add(writeWait))
             if !ok {
                 c.conn.WriteMessage(websocket.CloseMessage, []byte{})
@@ -84,10 +86,10 @@ func (c *ChatParticipant) writePump(){
 
             w.Write(message)
 
-            n:= len(c.send)
+            n:= len(c.messages)
             for i:=0;i<n;i++{
                 w.Write(newLine)
-                w.Write(<-c.send)
+                w.Write(<-c.messages)
             }
 
             if err := w.Close();err != nil{
@@ -103,16 +105,20 @@ func (c *ChatParticipant) writePump(){
     }
 }
 
-func serveWs(chatId string, hub *Hub, c echo.Context){
+func ServeWs(chatId string, userId string, hub *Hub, c echo.Context){
     conn, err := upgrader.Upgrade(c.Response() , c.Request(), nil)
+
     if err != nil{
         log.Println(err)
         return
     }
 
-    client := &ChatParticipant{chatId:chatId, hub:hub, conn:conn, send: make(chan []byte, 256)}
-    client.hub.register <- client
-    go client.writePump()
-    go client.readPump()
-}
+    cp := &ChatParticipant{chatId:chatId, userId:userId, hub:hub, conn:conn, messages: make(chan []byte, 256)}
+    log.Println("Participant chat id: ", cp.chatId)
 
+    cp.hub.register <- cp
+
+    go cp.writePump()
+    go cp.readPump()
+}
+ 
