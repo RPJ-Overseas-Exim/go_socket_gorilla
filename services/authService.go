@@ -13,5 +13,5 @@ func (as *authService) VerifyUser(username, password string) bool {
     adminUsername := "Rashid" 
     adminPassword := "Gp@12345"
 
-    return adminUsername != username || adminPassword != password 
+    return adminUsername == username && adminPassword == password 
 }

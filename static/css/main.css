@@ -554,6 +554,35 @@ video {
   display: none;
 }
 
+:root {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --primary: 84, 81%, 44%;
+  --primary-foreground: 89, 80%, 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 0, 72%, 51%;
+  --accent-foreground: 0, 75%, 15%;
+  --border: 240 5.9% 90%;
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 82, 85%, 67%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0, 94%, 82%;
+  --border: 240 3.7% 15.9%;
+}
+
+body{
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
 .fixed {
   position: fixed;
 }
@@ -592,9 +621,17 @@ video {
   border-radius: 0.5rem;
 }
 
+.bg-background {
+  background-color: hsl(var(--background));
+}
+
 .bg-gray-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
+}
+
+.bg-muted {
+  background-color: hsl(var(--muted));
 }
 
 .p-4 {
