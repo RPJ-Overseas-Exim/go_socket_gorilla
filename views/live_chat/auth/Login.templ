@@ -1,21 +1,37 @@
 package auth
 
-import "RPJ_Overseas_Exim/go_mod_home/views/live_chat/layout"
+import (
+	"RPJ_Overseas_Exim/go_mod_home/views/live_chat/layout"
+	"RPJ_Overseas_Exim/go_mod_home/views/live_chat/ui"
+)
 
-templ Login(){
-    @layout.Base(){
-        <div class="bg-muted my-16">
-            <form id="login-form" hx-post="/login" class="w-1/2 mx-auto p-4 rounded-lg bg-background">
-                <p>
-                    <label for="username">Username: </label>
-                    <input type="text" name="username" id="username" />
-                </p>
-                <p>
-                    <label for="password">Password: </label>
-                    <input type="password" name="password" id="password" />
-                </p>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
-    }
+templ Login() {
+	@layout.Base() {
+		<div class="bg-muted h-dvh flex justify-center items-center">
+			<form id="login-form" hx-post="/login" class="w-fit p-6 flex items-start gap-3 flex-col rounded-lg bg-background">
+				<h1 class="text-2xl font-bold">Login</h1>
+				<p class="m-0">
+                    @loginLable("username"){
+                        Username: 
+                    }
+					@ui.Input(templ.Attributes{"type": "text", "id": "username", "placeholder": "Enter your username"})
+				</p>
+				<p class="m-0">
+                    @loginLable("password"){
+                        Password: 
+                    }
+					@ui.Input(templ.Attributes{"type": "password", "id": "password", "placeholder": "Enter your password"})
+				</p>
+				@ui.Button(templ.Attributes{"type": "submit"}) {
+					Submit
+				}
+			</form>
+		</div>
+	}
+}
+
+templ loginLable(inputId string){
+    <label for={inputId} class="text-muted-foreground block mb-1 text-sm">
+        { children... }
+    </label>
 }
