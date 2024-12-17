@@ -1,3 +1,4 @@
+import "./lib/htmx.mjs"
 let conn,
     msg = document.querySelector(".msg"),
     output = document.querySelector(".output"),
