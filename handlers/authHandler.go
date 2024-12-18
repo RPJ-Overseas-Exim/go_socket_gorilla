@@ -47,7 +47,6 @@ func (ah *AuthHandler) loginHandler(c echo.Context) error {
         return renderView(c, http.StatusBadRequest, loginView)
     }
 
-
     token := jwt.CreateToken([]byte(os.Getenv("SECRET_KEY")), username)
     c.SetCookie(cookie.CreateCookie("Authentication", token, time.Now().Add(24 * time.Hour)))
 
@@ -56,5 +55,7 @@ func (ah *AuthHandler) loginHandler(c echo.Context) error {
 }
 
 func (ah *AuthHandler) logoutHandler(c echo.Context) error {
-    return nil
+    c.SetCookie(cookie.DeleteCookie("Authentication", ""))
+
+    return c.Redirect(http.StatusMovedPermanently, "/login")
 }
