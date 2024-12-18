@@ -1,28 +1,4 @@
-import "./lib/htmx.mjs"
-import "./chat.mjs"
-
-let conn,
-    msg = document.querySelector(".msg"),
-    output = document.querySelector(".output"),
-    email = document.querySelector(".email")
-
-
-const textInput = document.querySelector(".text-input")
-
-if (textInput) {
-    textInput.addEventListener("submit", function(e) {
-        e.preventDefault()
-        if (!conn && email) {
-            connectToSocket()
-        }
-        if (!msg || !msg.value || !conn || !email) {
-            return
-        }
-        conn.send(msg.value)
-    })
-}
-
-function connectToSocket() {
+export function connectToSocketUser() {
     if (window["WebSocket"]) {
         conn = new WebSocket("ws://" + document.location.host + "/ws?email=" + email.value)
         conn.onclose = () => {
@@ -44,6 +20,3 @@ function connectToSocket() {
     }
 }
 
-function appendLog(item) {
-    output.appendChild(item)
-}

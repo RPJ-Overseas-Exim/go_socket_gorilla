@@ -31,7 +31,7 @@ func (cs *ChatService) GetChatAndUserId(email string) (string, string) {
 
 	var participant models.Participant
 
-	log.Println("Eamil: ", email)
+	log.Println("Email: ", email)
 	cs.dbConn.Model(&models.Participant{}).
 		InnerJoins("inner join socket_users on participants.socket_user_id = socket_users.id and socket_users.email = ?", email).
 		First(&participant)

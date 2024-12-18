@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"RPJ_Overseas_Exim/go_mod_home/db/models"
 	"RPJ_Overseas_Exim/go_mod_home/services/cookie"
 	"RPJ_Overseas_Exim/go_mod_home/services/jwt"
 	"log"
@@ -9,9 +10,20 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
-func AuthUser(next echo.HandlerFunc) echo.HandlerFunc {
+type Middleware struct{
+    dbConn *gorm.DB
+}
+
+func NewMiddleware(dbConn *gorm.DB) *Middleware {
+    return &Middleware{
+            dbConn: dbConn,
+        }
+}
+
+func (m *Middleware) AuthUser(next echo.HandlerFunc) echo.HandlerFunc {
     return func(c echo.Context) error {
         err := godotenv.Load()
         if err!=nil {
@@ -30,14 +42,16 @@ func AuthUser(next echo.HandlerFunc) echo.HandlerFunc {
             return c.Redirect(http.StatusMovedPermanently, "/login")
         }
 
-        log.Printf("Token: %v", decoded.Claims)
-        log.Printf("Cookie %v", tokenString.Value)
+        var admin models.SocketUser
+        m.dbConn.Find(&admin, "email=?", decoded)
+        
+        c.Set("AdminId", admin.Id)
 
         return next(c)
     }
 }
 
-func AuthLogin(next echo.HandlerFunc) echo.HandlerFunc {
+func (m *Middleware) AuthLogin(next echo.HandlerFunc) echo.HandlerFunc {
     return func(c echo.Context) error {
         err := godotenv.Load()
         if err!=nil {

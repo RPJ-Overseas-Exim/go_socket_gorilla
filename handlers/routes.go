@@ -4,11 +4,13 @@ import (
 	"RPJ_Overseas_Exim/go_mod_home/handlers/middlewares"
 	"RPJ_Overseas_Exim/go_mod_home/services/socket"
 	"RPJ_Overseas_Exim/go_mod_home/utils"
+	admin_views "RPJ_Overseas_Exim/go_mod_home/views/live_chat/admin"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
-func SetupRoutes(e *echo.Echo, mh *MessageHandler, ch *ChatHandler, ah *AuthHandler, adh *AdminHandler){
+func SetupRoutes(e *echo.Echo, mh *MessageHandler, ch *ChatHandler, ah *AuthHandler, adh *AdminHandler, mid *middlewares.Middleware){
     // api routes
 
     e.GET("/", func (c echo.Context) error{
@@ -37,13 +39,18 @@ func SetupRoutes(e *echo.Echo, mh *MessageHandler, ch *ChatHandler, ah *AuthHand
 
     // authentication routes
 
-    authRoutes := e.Group("", middlewares.AuthLogin)
+    authRoutes := e.Group("", mid.AuthLogin)
     authRoutes.GET("/login", ah.loginView)
     authRoutes.POST("/login", ah.loginHandler)
-    e.POST("/logout", ah.logoutHandler)
+    e.GET("/logout", ah.logoutHandler)
 
     // admin routes
 
-    adminRoutes := e.Group("/admin", middlewares.AuthUser)
+    adminRoutes := e.Group("/admin", mid.AuthUser)
     adminRoutes.GET("", adh.adminView)
+
+    adminRoutes.GET("/chat/:chatId", func(c echo.Context) error {
+        chatView := admin_views.Chat()
+        return renderView(c, http.StatusOK, chatView)
+    })
 }

@@ -38,16 +38,16 @@ func (ah *AuthHandler) loginHandler(c echo.Context) error {
         return renderView(c, http.StatusBadRequest, loginView)
     }
 
-    username := c.FormValue("username")
+    email := c.FormValue("email")
     password := c.FormValue("password")
 
-    verified := ah.as.VerifyUser(username, password)
+    verified := ah.as.VerifyUser(email, password)
     if !verified {
         loginView := auth.Login()
         return renderView(c, http.StatusBadRequest, loginView)
     }
 
-    token := jwt.CreateToken([]byte(os.Getenv("SECRET_KEY")), username)
+    token := jwt.CreateToken([]byte(os.Getenv("SECRET_KEY")), email)
     c.SetCookie(cookie.CreateCookie("Authentication", token, time.Now().Add(24 * time.Hour)))
 
     c.Response().Header().Set("HX-Redirect", "/admin")

@@ -3,6 +3,7 @@ package main
 import (
 	"RPJ_Overseas_Exim/go_mod_home/db"
 	"RPJ_Overseas_Exim/go_mod_home/handlers"
+	"RPJ_Overseas_Exim/go_mod_home/handlers/middlewares"
 	"RPJ_Overseas_Exim/go_mod_home/services"
 
 	"github.com/labstack/echo/v4"
@@ -18,6 +19,8 @@ func main(){
     ms := services.NewMessageService(db)
     mh := handlers.NewMessageHandler(ms)
 
+    mid := middlewares.NewMiddleware(db)
+
     as := services.NewAuthService()
     ah := handlers.NewAuthHandler(as)
 
@@ -27,6 +30,6 @@ func main(){
     ads := services.NewAdminService()
     adh := handlers.NewAdminHandler(ads, cs)
 
-    handlers.SetupRoutes(e, mh, ch, ah, adh)
+    handlers.SetupRoutes(e, mh, ch, ah, adh, mid)
     e.Logger.Fatal(e.Start(":8181"))
 }

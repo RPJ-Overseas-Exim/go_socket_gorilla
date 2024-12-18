@@ -10,8 +10,8 @@ func NewAuthService() *authService{
 }
 
 func (as *authService) VerifyUser(username, password string) bool {
-    adminUsername := "Rashid" 
+    adminEmail := "abc@gmail.com" 
     adminPassword := "Gp@12345"
 
-    return adminUsername == username && adminPassword == password 
+    return adminEmail == username && adminPassword == password 
 }

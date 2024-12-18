@@ -1,0 +1,36 @@
+package admin_views
+
+import "RPJ_Overseas_Exim/go_mod_home/views/live_chat/layout"
+
+templ Chat(){
+    @layout.Base(){
+        <section id="chat-messages">
+            <h2>Chat</h2>
+
+            <div id="messages">
+                @Message("My message", true){}
+                @Message("Client message", false){}
+            </div>
+
+            <div>
+                <form hx-post="/">
+                    <textarea
+                        class="border px-4 py-2 rounded-lg"
+                        placeholder="Enter the message..."
+                    >
+                    </textarea>
+
+                    <button type="submit">
+                        Send
+                    </button>
+                </form>
+            </div>
+        </section>
+    }
+}
+
+templ Message(message string, self bool){
+    <div class="border mb-4 px-4 py-2">
+        <div class="flex flex-end">{message}</div>
+    </div>
+}
