@@ -65,3 +65,9 @@ func migrateDb(db *gorm.DB){
     // db.AutoMigrate(&models.Message{})
 }
 
+type ResultsType struct {
+    Email, 
+    ChatId string
+    Online bool
+}
+

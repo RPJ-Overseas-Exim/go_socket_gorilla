@@ -21,11 +21,11 @@ func main(){
     as := services.NewAuthService()
     ah := handlers.NewAuthHandler(as)
 
-    ads := services.NewAdminService()
-    adh := handlers.NewAdminHandler(ads)
-
     cs := services.NewChatService(db)
     ch := handlers.NewChatHandler(cs)
+
+    ads := services.NewAdminService()
+    adh := handlers.NewAdminHandler(ads, cs)
 
     handlers.SetupRoutes(e, mh, ch, ah, adh)
     e.Logger.Fatal(e.Start(":8181"))

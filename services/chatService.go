@@ -1,6 +1,7 @@
 package services
 
 import (
+	"RPJ_Overseas_Exim/go_mod_home/db"
 	"RPJ_Overseas_Exim/go_mod_home/db/models"
 	"log"
 
@@ -11,17 +12,19 @@ type ChatService struct {
 	dbConn *gorm.DB
 }
 
-func (cs *ChatService) GetAllChats() *[]models.Chat {
-	var chats []models.Chat
+
+func (cs *ChatService) GetAllChats() *[]db.ResultsType {
+
+    var results []db.ResultsType;
 
 	cs.dbConn.
-        Model(&models.Chat{}).
-		InnerJoins("inner join participants on chats.id = participants.chat_id").
+        Model(&models.Participant{}).
 		InnerJoins("inner join socket_users on participants.socket_user_id = socket_users.id").
-        Group("chats.id").
-		Find(&chats)
+		Scan(&results)
 
-	return &chats
+    log.Println(results)
+
+	return &results
 }
 
 func (cs *ChatService) GetChatAndUserId(email string) (string, string) {
@@ -52,7 +55,6 @@ func (cs *ChatService) GetChatAndUserId(email string) (string, string) {
 		return insertedChat.Id, user.Id
 	}
 }
-
 func NewChatService(dbConn *gorm.DB) *ChatService {
 	return &ChatService{
 		dbConn,

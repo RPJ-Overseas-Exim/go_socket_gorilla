@@ -36,13 +36,14 @@ func SetupRoutes(e *echo.Echo, mh *MessageHandler, ch *ChatHandler, ah *AuthHand
     })
 
     // authentication routes
+
     authRoutes := e.Group("", middlewares.AuthLogin)
-    authRoutes.GET("/login", ah.LoginView)
-    authRoutes.POST("/login", ah.LoginHandler)
-    e.POST("/logout", ah.LogoutHandler)
+    authRoutes.GET("/login", ah.loginView)
+    authRoutes.POST("/login", ah.loginHandler)
+    e.POST("/logout", ah.logoutHandler)
 
     // admin routes
 
     adminRoutes := e.Group("/admin", middlewares.AuthUser)
-    adminRoutes.GET("", adh.AdminView)
+    adminRoutes.GET("", adh.adminView)
 }

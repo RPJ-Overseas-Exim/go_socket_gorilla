@@ -1,0 +1,25 @@
+package admin_views
+
+import (
+	"RPJ_Overseas_Exim/go_mod_home/views/live_chat/layout"
+	"RPJ_Overseas_Exim/go_mod_home/db"
+)
+
+templ AdminHome(chats *[]db.ResultsType) {
+	@layout.Base() {
+		<main class="flex h-dvh">
+			<div class="w-1/4 max-w-[300px] border-r border-border h-full">
+				@chatList(chats)
+			</div>
+			<div class="w-12/11 h-full"></div>
+		</main>
+	}
+}
+
+templ chatList(chats *[]db.ResultsType) {
+	for _,i := range *chats {
+		<div class="p-4 ">
+			{ i.Email }
+		</div>
+	}
+}

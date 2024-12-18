@@ -107,7 +107,7 @@
 }
 
 /*
-! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -619,6 +619,14 @@ body{
   height: 100dvh;
 }
 
+.h-full {
+  height: 100%;
+}
+
+.w-1\/4 {
+  width: 25%;
+}
+
 .w-\[300px\] {
   width: 300px;
 }
@@ -626,6 +634,10 @@ body{
 .w-fit {
   width: -moz-fit-content;
   width: fit-content;
+}
+
+.max-w-\[300px\] {
+  max-width: 300px;
 }
 
 .flex-col {
@@ -654,6 +666,10 @@ body{
 
 .border {
   border-width: 1px;
+}
+
+.border-r {
+  border-right-width: 1px;
 }
 
 .border-border {
