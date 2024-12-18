@@ -107,7 +107,7 @@
 }
 
 /*
-! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -599,16 +599,6 @@ body{
   margin: 0px;
 }
 
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.my-16 {
-  margin-top: 4rem;
-  margin-bottom: 4rem;
-}
-
 .mb-1 {
   margin-bottom: 0.25rem;
 }
@@ -627,10 +617,6 @@ body{
 
 .h-dvh {
   height: 100dvh;
-}
-
-.w-1\/2 {
-  width: 50%;
 }
 
 .w-\[300px\] {
@@ -687,16 +673,16 @@ body{
   background-color: hsl(var(--muted));
 }
 
+.p-2 {
+  padding: 0.5rem;
+}
+
 .p-4 {
   padding: 1rem;
 }
 
 .p-6 {
   padding: 1.5rem;
-}
-
-.p-2 {
-  padding: 0.5rem;
 }
 
 .px-2 {

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"RPJ_Overseas_Exim/go_mod_home/services/cookie"
 	"RPJ_Overseas_Exim/go_mod_home/services/jwt"
 	"RPJ_Overseas_Exim/go_mod_home/views/live_chat/auth"
 	"net/http"
@@ -47,14 +48,9 @@ func (ah *AuthHandler) LoginHandler(c echo.Context) error {
         return renderView(c, http.StatusBadRequest, loginView)
     }
 
-    cookie := new(http.Cookie)
-    cookie.Name = "Authentication"
 
     token := jwt.CreateToken([]byte(os.Getenv("SECRET_KEY")), username)
-    cookie.Value = token
-
-    cookie.Expires = time.Now().Add(24 * time.Hour)
-    c.SetCookie(cookie)
+    c.SetCookie(cookie.CreateCookie("Authentication", token, time.Now().Add(24 * time.Hour)))
 
     c.Response().Header().Set("HX-Redirect", "/admin")
     return c.Redirect(http.StatusOK, "/admin")
