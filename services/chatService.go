@@ -18,11 +18,9 @@ func (cs *ChatService) GetAllChats() *[]db.ResultsType {
     var results []db.ResultsType;
 
 	cs.dbConn.
-        Model(&models.Participant{}).
-		InnerJoins("inner join socket_users on participants.socket_user_id = socket_users.id").
+        Table("socket_users").
+		InnerJoins("inner join participants on participants.socket_user_id = socket_users.id").
 		Scan(&results)
-
-    log.Println(results)
 
 	return &results
 }

@@ -36,6 +36,7 @@ type ChatParticipant struct {
     messages chan []byte
     userId string
     chatId string
+    role string
 }
 
 func (c *ChatParticipant) readPump() {
@@ -113,8 +114,8 @@ func ServeWs(chatId string, userId string, hub *Hub, c echo.Context){
         return
     }
 
-    cp := &ChatParticipant{chatId:chatId, userId:userId, hub:hub, conn:conn, messages: make(chan []byte, 256)}
-    log.Println("Participant chat id: ", cp.chatId)
+    cp := &ChatParticipant{chatId:chatId, userId:userId, hub:hub, conn:conn, messages: make(chan []byte, 256), role:"user"}
+    // log.Println("Participant chat id: ", cp.chatId)
 
     cp.hub.register <- cp
 
@@ -122,3 +123,18 @@ func ServeWs(chatId string, userId string, hub *Hub, c echo.Context){
     go cp.readPump()
 }
  
+func ServeAdminWs(userId string, hub *Hub, c echo.Context){
+    conn, err := upgrader.Upgrade(c.Response() , c.Request(), nil)
+
+    if err != nil{
+        log.Println(err)
+        return
+    }
+
+    cp := &ChatParticipant{chatId: "adminTemp", userId: userId, hub: hub, conn: conn, messages: make(chan []byte, 256), role: "admin"}
+
+    cp.hub.register <- cp
+
+    go cp.writePump()
+    go cp.readPump()
+}

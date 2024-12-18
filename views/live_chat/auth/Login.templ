@@ -11,7 +11,7 @@ templ Login() {
 			<form id="login-form" hx-post="/login" class="w-fit p-6 flex items-start gap-3 flex-col rounded-lg bg-background">
 				<h1 class="text-2xl font-bold">Login</h1>
 				<p class="m-0">
-                    @loginLable("username"){
+                    @loginLable("email"){
                         Email: 
                     }
 					@ui.Input(templ.Attributes{"type": "text", "id": "username", "placeholder": "Enter your username", "name": "email"})
@@ -25,6 +25,7 @@ templ Login() {
 				@ui.Button(templ.Attributes{"type": "submit"}) {
 					Submit
 				}
+
 			</form>
 		</div>
 	}

@@ -19,12 +19,12 @@
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
+    --primary: 84, 81%, 44%;
     --primary-foreground: 82, 85%, 67%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0, 94%, 82%;
+    --accent: 0, 72%, 51%;
+    --accent-foreground: 0, 75%, 15%;
     --border: 240 3.7% 15.9%;
   }
 

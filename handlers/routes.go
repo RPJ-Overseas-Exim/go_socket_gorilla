@@ -10,14 +10,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func SetupRoutes(e *echo.Echo, mh *MessageHandler, ch *ChatHandler, ah *AuthHandler, adh *AdminHandler, mid *middlewares.Middleware){
+func SetupRoutes(e *echo.Echo, hub *socket.Hub, mh *MessageHandler, ch *ChatHandler, ah *AuthHandler, adh *AdminHandler, mid *middlewares.Middleware){
     // api routes
 
     e.GET("/", ch.renderMessages)
 
     // socket routes
 
-    hub := socket.NewHub()
     go hub.Run()
 
     e.GET("/ws", func (c echo.Context) error {

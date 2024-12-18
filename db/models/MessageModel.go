@@ -8,5 +8,4 @@ type Message struct{
     SocketUserId string
     ChatId string
     Message string
-    SenderId int
 }
