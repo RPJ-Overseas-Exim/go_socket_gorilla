@@ -635,6 +635,11 @@ body{
   height: 400px;
 }
 
+.h-\[max-content\] {
+  height: -moz-max-content;
+  height: max-content;
+}
+
 .h-dvh {
   height: 100dvh;
 }
@@ -650,6 +655,10 @@ body{
 
 .w-1\/4 {
   width: 25%;
+}
+
+.w-11\/12 {
+  width: 91.666667%;
 }
 
 .w-3 {
@@ -716,6 +725,10 @@ body{
   justify-content: space-between;
 }
 
+.justify-around {
+  justify-content: space-around;
+}
+
 .gap-3 {
   gap: 0.75rem;
 }
@@ -750,6 +763,10 @@ body{
 
 .border-r {
   border-right-width: 1px;
+}
+
+.border-t {
+  border-top-width: 1px;
 }
 
 .border-border {
@@ -803,6 +820,10 @@ body{
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+}
+
+.pt-2 {
+  padding-top: 0.5rem;
 }
 
 .text-2xl {

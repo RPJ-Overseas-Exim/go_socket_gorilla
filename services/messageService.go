@@ -13,9 +13,10 @@ type MessageService struct {
 
 func (ms *MessageService) GetMessages(chatId string) *[]models.Message {
 	var msgs []models.Message
-	ms.dbConn.
-		InnerJoins("Chat", ms.dbConn.Where(&models.Chat{Id: chatId})).
-		Find(&msgs)
+	ms.dbConn.Find(msgs, "chat_id = ?", chatId)
+
+    log.Println("Msgs: ", msgs)
+
 	return &msgs
 }
 

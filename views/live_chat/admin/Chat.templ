@@ -3,35 +3,46 @@ package admin_views
 import (
 	"RPJ_Overseas_Exim/go_mod_home/utils"
 	"fmt"
+	"RPJ_Overseas_Exim/go_mod_home/views/live_chat/ui"
+	"RPJ_Overseas_Exim/go_mod_home/db/models"
 )
 
-templ Chat() {
-	<section id="chat-messages">
+templ Chat(chatHeading string, messages *[]models.Message, adminId string) {
+	<div class="flex flex-col h-full">
 
 		<h2 class="text-2xl border-b p-4">{ "Chat heading" }</h2>
 
-		<div id="messages">
-			@Message("My message", true)
-			@Message("Client message", false)
+		<div id="messages" class="pt-2 h-full">
+            for _, message := range(*messages){
+                @Message(message.Message, message.SocketUserId == adminId)
+            }
 		</div>
 
-		<div>
-			<form hx-post="/">
+		<div class="border-t flex justify-center items-center">
+
+			<form
+                hx-post="/"
+                class="flex items-center justify-around w-11/12 border h-[max-content]"
+            >
 				<textarea
-					class="border px-4 py-2 rounded-lg h-fit"
+					class="border px-4 py-2 rounded-lg h-fit w-full"
 					placeholder="Enter the message..."
 				></textarea>
-				<button type="submit">
-					Send
-				</button>
+
+                @ui.Button(templ.Attributes{"type": "submit"}){
+                    <div class="px-2">
+                        Send
+                    </div>
+                }
 			</form>
+
 		</div>
 
-	</section>
+	</div>
 }
 
 templ Message(message string, self bool) {
-	<div class={ fmt.Sprintf("mb-4 px-4 py-2 flex %v", utils.CheckValue(self, "justify-end", "justify-start")) }>
+	<div class={ fmt.Sprintf("mb-4 px-4 flex %v", utils.CheckValue(self, "justify-end", "justify-start")) }>
 
 		<div class={ fmt.Sprintf("border px-4 py-2 rounded-lg %v", utils.CheckValue(self, "rounded-br-[0px]", "rounded-bl-[0px]")) }>
 			{ message }

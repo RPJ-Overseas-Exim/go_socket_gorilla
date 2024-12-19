@@ -1,8 +1,0 @@
-<section id=\"chat-messages\"><h2 class=\"text-2xl border-b p-4\">
-</h2><div id=\"messages\">
-</div><div><form hx-post=\"/\"><textarea class=\"border px-4 py-2 rounded-lg h-fit\" placeholder=\"Enter the message...\"></textarea> <button type=\"submit\">Send</button></form></div></section>
-<div class=\"
-\">
-<div class=\"
-\">
-</div></div>

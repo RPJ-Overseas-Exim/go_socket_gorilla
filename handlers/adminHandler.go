@@ -13,12 +13,14 @@ type AdminServices interface{
 type AdminHandler struct{
     as AdminServices
     cs chatService
+    ms MessageService
 }
 
-func NewAdminHandler(as AdminServices, cs chatService) *AdminHandler{
+func NewAdminHandler(as AdminServices, cs chatService, ms MessageService) *AdminHandler{
     return &AdminHandler{
         as,
         cs,
+        ms,
     }
 }
 

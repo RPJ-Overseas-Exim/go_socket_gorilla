@@ -53,6 +53,7 @@ func (cs *ChatService) GetChatAndUserId(email string) (string, string) {
 		return insertedChat.Id, user.Id
 	}
 }
+
 func NewChatService(dbConn *gorm.DB) *ChatService {
 	return &ChatService{
 		dbConn,

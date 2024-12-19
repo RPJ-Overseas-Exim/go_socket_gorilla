@@ -29,7 +29,7 @@ func main(){
     ch := handlers.NewChatHandler(cs)
 
     ads := services.NewAdminService()
-    adh := handlers.NewAdminHandler(ads, cs)
+    adh := handlers.NewAdminHandler(ads, cs, ms)
 
     hub := socket.NewHub(db)
     handlers.SetupRoutes(e, hub, mh, ch, ah, adh, mid)

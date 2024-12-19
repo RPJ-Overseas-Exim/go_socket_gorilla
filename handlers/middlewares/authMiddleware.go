@@ -47,7 +47,6 @@ func (m *Middleware) AuthUser(next echo.HandlerFunc) echo.HandlerFunc {
         // get the user id from the database
         var admin models.SocketUser
         m.dbConn.Find(&admin, "email=?", decoded)
-        
         c.Set("AdminId", admin.Id)
 
         return next(c)

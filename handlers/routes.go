@@ -48,8 +48,8 @@ func SetupRoutes(e *echo.Echo, hub *socket.Hub, mh *MessageHandler, ch *ChatHand
 
     adminRoutes.GET("/ws",func(c echo.Context) error{
         adminId, ok  := c.Get("AdminId").(string)
-
         if !ok{
+            c.Response().WriteHeader(400)
             return &utils.HTTPException{Message: "Could not find adminId on context"}
         }
 
@@ -58,7 +58,16 @@ func SetupRoutes(e *echo.Echo, hub *socket.Hub, mh *MessageHandler, ch *ChatHand
     })
 
     adminRoutes.GET("/chat/:chatId", func(c echo.Context) error {
-        chatView := admin_views.Chat()
+        adminId, ok := c.Get("AdminId").(string)
+        if !ok {
+            c.Response().WriteHeader(400)
+            return &utils.HTTPException{Message: "Could not find adminId on context"}
+        }
+
+        chatId := c.Param("chatId")
+        msgs := adh.ms.GetMessages(chatId)
+
+        chatView := admin_views.Chat("Chat heading", msgs, adminId)
         return renderView(c, http.StatusOK, chatView)
     })
 }
