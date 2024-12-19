@@ -54,7 +54,7 @@ func AdminHome(chats *[]db.ResultsType) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</section><div class=\"w-12/11 h-full\"><section id=\"chat-messages\"></section></div></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</section><div class=\"w-11/12 h-full\"><section id=\"chat-messages\"></section></div></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
