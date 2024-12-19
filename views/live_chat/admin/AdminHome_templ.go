@@ -10,6 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"RPJ_Overseas_Exim/go_mod_home/db"
+	"RPJ_Overseas_Exim/go_mod_home/utils"
 	"RPJ_Overseas_Exim/go_mod_home/views/live_chat/layout"
 )
 
@@ -97,7 +98,7 @@ func chatList(chats *[]db.ResultsType) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs("/admin/chat/" + chat.ChatId)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/live_chat/admin/AdminHome.templ`, Line: 29, Col: 48}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/live_chat/admin/AdminHome.templ`, Line: 30, Col: 48}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -110,26 +111,26 @@ func chatList(chats *[]db.ResultsType) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(chat.ChatId)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/live_chat/admin/AdminHome.templ`, Line: 31, Col: 36}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/live_chat/admin/AdminHome.templ`, Line: 32, Col: 36}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><span class=\"text-wrap\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var6 string
-			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(chat.Email)
+			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(utils.NameShortener(chat.Email, 20))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/live_chat/admin/AdminHome.templ`, Line: 33, Col: 15}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/live_chat/admin/AdminHome.templ`, Line: 35, Col: 44}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <span class=\"relative flex h-3 w-3\"><span class=\"animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75\"></span> <span class=\"relative inline-flex rounded-full h-3 w-3 bg-primary\"></span></span></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> <span class=\"relative flex h-3 w-3\"><span class=\"animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75\"></span> <span class=\"relative inline-flex rounded-full h-3 w-3 bg-primary\"></span></span></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

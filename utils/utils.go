@@ -14,3 +14,10 @@ func GenNanoid() *string{
     return &id
 }
 
+func NameShortener(name string, maxLen int) string {
+    if(len(name) > maxLen){
+        return name[0:maxLen] + "..."
+    }
+
+    return name
+}

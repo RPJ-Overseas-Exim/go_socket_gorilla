@@ -36,20 +36,20 @@ func Chat(chatHeading string, messages *[]models.Message, adminId string) templ.
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col h-full\"><h2 class=\"text-2xl border-b p-4\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col h-full\"><h2 class=\"text-2xl border-b border-border p-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs("Chat heading")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/live_chat/admin/Chat.templ`, Line: 13, Col: 52}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/live_chat/admin/Chat.templ`, Line: 13, Col: 66}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h2><div id=\"messages\" class=\"pt-2 h-full\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h2><div id=\"messages\" class=\"pt-2 h-full overflow-y-auto\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -59,7 +59,7 @@ func Chat(chatHeading string, messages *[]models.Message, adminId string) templ.
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"border-t flex justify-center items-center\"><form hx-post=\"/\" class=\"flex items-center justify-around w-11/12 border h-[max-content]\"><textarea class=\"border px-4 py-2 rounded-lg h-fit w-full\" placeholder=\"Enter the message...\"></textarea>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"border-border border-t flex justify-center items-center\"><form hx-post=\"/\" class=\"flex items-center justify-around gap-2 w-11/12 h-[max-content] mb-0 py-2\"><textarea class=\"border px-4 py-2 rounded-lg h-fit w-full bg-transparent\" placeholder=\"Enter the message...\"></textarea>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -75,7 +75,15 @@ func Chat(chatHeading string, messages *[]models.Message, adminId string) templ.
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"px-2\">Send</div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"p-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = ui.Send().Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -114,7 +122,7 @@ func Message(message string, self bool) templ.Component {
 			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		var templ_7745c5c3_Var5 = []any{fmt.Sprintf("mb-4 px-4 flex %v", utils.CheckValue(self, "justify-end", "justify-start"))}
+		var templ_7745c5c3_Var5 = []any{fmt.Sprintf("pb-4 px-4 flex %v", utils.CheckValue(self, "justify-end", "justify-start"))}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var5...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -136,7 +144,7 @@ func Message(message string, self bool) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var7 = []any{fmt.Sprintf("border px-4 py-2 rounded-lg %v", utils.CheckValue(self, "rounded-br-[0px]", "rounded-bl-[0px]"))}
+		var templ_7745c5c3_Var7 = []any{fmt.Sprintf("border border-border px-4 py-1 rounded-lg %v", utils.CheckValue(self, "rounded-br-[0px]", "rounded-bl-[0px]"))}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var7...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

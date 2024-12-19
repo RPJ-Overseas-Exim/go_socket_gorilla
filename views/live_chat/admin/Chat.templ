@@ -10,28 +10,28 @@ import (
 templ Chat(chatHeading string, messages *[]models.Message, adminId string) {
 	<div class="flex flex-col h-full">
 
-		<h2 class="text-2xl border-b p-4">{ "Chat heading" }</h2>
+		<h2 class="text-2xl border-b border-border p-4">{ "Chat heading" }</h2>
 
-		<div id="messages" class="pt-2 h-full">
+		<div id="messages" class="pt-2 h-full overflow-y-auto">
             for _, message := range(*messages){
                 @Message(message.Message, message.SocketUserId == adminId)
             }
 		</div>
 
-		<div class="border-t flex justify-center items-center">
+		<div class="border-border border-t flex justify-center items-center">
 
 			<form
                 hx-post="/"
-                class="flex items-center justify-around w-11/12 border h-[max-content]"
+                class="flex items-center justify-around gap-2 w-11/12 h-[max-content] mb-0 py-2"
             >
 				<textarea
-					class="border px-4 py-2 rounded-lg h-fit w-full"
+					class="border px-4 py-2 rounded-lg h-fit w-full bg-transparent"
 					placeholder="Enter the message..."
 				></textarea>
 
                 @ui.Button(templ.Attributes{"type": "submit"}){
-                    <div class="px-2">
-                        Send
+                    <div class="p-2">
+                        @ui.Send()
                     </div>
                 }
 			</form>
@@ -42,9 +42,9 @@ templ Chat(chatHeading string, messages *[]models.Message, adminId string) {
 }
 
 templ Message(message string, self bool) {
-	<div class={ fmt.Sprintf("mb-4 px-4 flex %v", utils.CheckValue(self, "justify-end", "justify-start")) }>
+	<div class={ fmt.Sprintf("pb-4 px-4 flex %v", utils.CheckValue(self, "justify-end", "justify-start")) }>
 
-		<div class={ fmt.Sprintf("border px-4 py-2 rounded-lg %v", utils.CheckValue(self, "rounded-br-[0px]", "rounded-bl-[0px]")) }>
+		<div class={ fmt.Sprintf("border border-border px-4 py-1 rounded-lg %v", utils.CheckValue(self, "rounded-br-[0px]", "rounded-bl-[0px]")) }>
 			{ message }
 		</div>
 
