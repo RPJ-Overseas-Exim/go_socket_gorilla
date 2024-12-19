@@ -824,6 +824,10 @@ body{
   font-weight: 700;
 }
 
+.text-foreground {
+  color: hsl(var(--foreground));
+}
+
 .text-muted-foreground {
   color: hsl(var(--muted-foreground));
 }

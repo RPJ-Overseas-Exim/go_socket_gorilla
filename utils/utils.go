@@ -13,3 +13,4 @@ func GenNanoid() *string{
     }
     return &id
 }
+

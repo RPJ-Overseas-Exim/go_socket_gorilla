@@ -20,3 +20,6 @@ export function connectToSocketUser() {
     }
 }
 
+export function getBaseURL(){
+    return location.protocol + location.host
+}

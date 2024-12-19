@@ -1,14 +1,13 @@
 function connectToSocket() {
-    const link = document.location
-    const protocol = link.protocol
-    const host = link.host
+    const protocol = location.protocol
+    const host = location.host
 
     let wsURL = "ws://"
     if(protocol === "https:"){
         wsURL = "wss://"
     }
 
-    wsURL += host + "/ws?email=abc@gmail.com"
+    wsURL += host + "/admin/ws"
 
     const conn = new WebSocket(wsURL)
     conn.onopen = function(){
@@ -20,6 +19,19 @@ function connectToSocket() {
     }
 }
 
-window.onload = function(){
+if( location.pathname === "/admin"){
     connectToSocket()
 }
+
+//const chatBtns = document.querySelectorAll(".chat-button")
+//
+//if(chatBtns?.length>0){
+//    chatBtns.forEach(chatBtn=>{
+//        chatBtn.addEventListener("click", async ()=>{
+//            const chatId = chatBtn.getAttribute("data-chatId")
+//            const res = await fetch(getBaseURL() + "/admin/joinChat/" + chatId)
+//            console.log(res)
+//        })
+//    })
+//
+//}

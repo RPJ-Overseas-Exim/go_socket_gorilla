@@ -1,6 +1,7 @@
 package views_livechat
 
 import "RPJ_Overseas_Exim/go_mod_home/views/live_chat/layout"
+import "RPJ_Overseas_Exim/go_mod_home/views/live_chat/ui"
 
 templ LiveChat() {
     @layout.Base(){
@@ -9,7 +10,9 @@ templ LiveChat() {
 				<form class="text-input">
                 <input type="text" class="email" placeholder="Your email please">
                 <input type="text" class="msg" placeholder="Type your message">
-                <button type="submit">Send</button>
+                @ui.Button(templ.Attributes{"type": "submit"}){
+                    Send
+                }
                 </form>
 			</section>
     }

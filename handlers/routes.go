@@ -46,6 +46,17 @@ func SetupRoutes(e *echo.Echo, hub *socket.Hub, mh *MessageHandler, ch *ChatHand
     adminRoutes := e.Group("/admin", mid.AuthUser)
     adminRoutes.GET("", adh.adminView)
 
+    adminRoutes.GET("/ws",func(c echo.Context) error{
+        adminId, ok  := c.Get("AdminId").(string)
+
+        if !ok{
+            return &utils.HTTPException{Message: "Could not find adminId on context"}
+        }
+
+        socket.ServeAdminWs(adminId, hub, c)
+        return nil
+    })
+
     adminRoutes.GET("/chat/:chatId", func(c echo.Context) error {
         chatView := admin_views.Chat()
         return renderView(c, http.StatusOK, chatView)

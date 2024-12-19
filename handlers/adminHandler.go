@@ -27,3 +27,4 @@ func (ah *AdminHandler) adminView(c echo.Context) error {
 
     return renderView(c, 200, admin_views.AdminHome(users))
 }
+

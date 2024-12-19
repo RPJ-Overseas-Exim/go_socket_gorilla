@@ -12,7 +12,9 @@ templ AdminHome(chats *[]db.ResultsType) {
 				<h1 class="text-xl px-4 py-2 font-bold">Chats</h1>
 				@chatList(chats)
 			</section>
-			<div class="w-12/11 h-full"></div>
+			<div class="w-12/11 h-full">
+                @Chat()
+            </div>
 		</main>
 	}
 }
@@ -20,7 +22,7 @@ templ AdminHome(chats *[]db.ResultsType) {
 templ chatList(chats *[]db.ResultsType) {
 	for _,chat := range *chats {
 		<div
-			class="p-4 hover:bg-muted flex justify-between items-center gap-4 cursor-pointer"
+			class="chat-button p-4 hover:bg-muted flex justify-between items-center gap-4 cursor-pointer"
 			role="button"
 			aria-labelledby="chat-button"
             hx-post={"/admin/chat/" + chat.ChatId}

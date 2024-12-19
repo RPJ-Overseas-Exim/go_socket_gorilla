@@ -59,8 +59,7 @@ func (h *Hub) Run(){
             // log.Println("registering ", cp.userId)
             _, ok := h.chats[cp.chatId] 
 
-            h.dbConn.Save(&models.SocketUser{Id:cp.userId, Online: true})
-
+            h.dbConn.Model(&models.SocketUser{}).Where("id = ?", cp.userId).Update("Online", true)
             if !ok {
                 h.chats[cp.chatId] = NewChat(cp)
             }else{
@@ -69,7 +68,7 @@ func (h *Hub) Run(){
 
         case cp := <-h.unregister:
             // log.Println("unregistering ", cp.userId)
-            h.dbConn.Save(&models.SocketUser{Id:cp.userId, Online: false})
+            h.dbConn.Model(&models.SocketUser{}).Where("id = ?", cp.userId).Update("Online", false)
 
             if _, ok := h.chats[cp.chatId].cp[cp] ; ok{
                 _, ok := h.chats[cp.chatId].cp[cp]
