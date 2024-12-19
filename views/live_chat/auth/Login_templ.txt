@@ -1,0 +1,10 @@
+<div class=\"bg-muted h-dvh flex justify-center items-center\"><form id=\"login-form\" hx-post=\"/login\" class=\"w-fit p-6 flex items-start gap-3 flex-col rounded-lg bg-background\"><h1 class=\"text-2xl font-bold\">Login</h1><p class=\"m-0\">
+Email: 
+</p><p class=\"m-0\">
+Password: 
+</p>
+Submit
+</form></div>
+<label for=\"
+\" class=\"text-muted-foreground block mb-1 text-sm\">
+</label>

@@ -13,9 +13,7 @@ import (
 func SetupRoutes(e *echo.Echo, mh *MessageHandler, ch *ChatHandler, ah *AuthHandler, adh *AdminHandler, mid *middlewares.Middleware){
     // api routes
 
-    e.GET("/", func (c echo.Context) error{
-        return ch.renderMessages(c)
-    })
+    e.GET("/", ch.renderMessages)
 
     // socket routes
 

@@ -43,7 +43,7 @@ func LiveChat() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section id=\"live-chat\" class=\"live-chat bg-gray-200 fixed bottom-10 right-10 rounded-lg p-4\"><div class=\"output h-[400px] w-[300px]\"></div><form class=\"text-input\"><input type=\"text\" class=\"email\" placeholder=\"Your email please\"> <input type=\"text\" class=\"msg\" placeholder=\"Type your message\"> <button type=\"submit\">Send</button></form></section>")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

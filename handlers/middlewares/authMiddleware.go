@@ -31,17 +31,20 @@ func (m *Middleware) AuthUser(next echo.HandlerFunc) echo.HandlerFunc {
             return c.Redirect(http.StatusMovedPermanently, "/login")
         }
 
+        // get the token string from the cookie
         tokenString, err := c.Cookie("Authentication")
         if err!=nil {
             return c.Redirect(http.StatusMovedPermanently, "/login")
         }
 
+        // verify the token and get the email from the token string
         decoded, err := jwt.VerifyToken([]byte(os.Getenv("SECRET_KEY")), tokenString.Value)
         if err!=nil {
             c.SetCookie(cookie.DeleteCookie("Authentication", ""))
             return c.Redirect(http.StatusMovedPermanently, "/login")
         }
 
+        // get the user id from the database
         var admin models.SocketUser
         m.dbConn.Find(&admin, "email=?", decoded)
         

@@ -1,0 +1,4 @@
+<main class=\"flex h-dvh\"><div class=\"w-1/4 max-w-[300px] border-r border-border h-full\">
+</div><div class=\"w-12/11 h-full\"></div></main>
+<div class=\"p-4 \">
+</div>

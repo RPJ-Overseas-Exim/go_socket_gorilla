@@ -1,36 +1,41 @@
 package admin_views
 
-import "RPJ_Overseas_Exim/go_mod_home/views/live_chat/layout"
+import (
+	"RPJ_Overseas_Exim/go_mod_home/utils"
+	"fmt"
+)
 
-templ Chat(){
-    @layout.Base(){
-        <section id="chat-messages">
-            <h2>Chat</h2>
+templ Chat() {
+	<section id="chat-messages">
 
-            <div id="messages">
-                @Message("My message", true){}
-                @Message("Client message", false){}
-            </div>
+		<h2 class="text-2xl border-b p-4">{ "Chat heading" }</h2>
 
-            <div>
-                <form hx-post="/">
-                    <textarea
-                        class="border px-4 py-2 rounded-lg"
-                        placeholder="Enter the message..."
-                    >
-                    </textarea>
+		<div id="messages">
+			@Message("My message", true)
+			@Message("Client message", false)
+		</div>
 
-                    <button type="submit">
-                        Send
-                    </button>
-                </form>
-            </div>
-        </section>
-    }
+		<div>
+			<form hx-post="/">
+				<textarea
+					class="border px-4 py-2 rounded-lg h-fit"
+					placeholder="Enter the message..."
+				></textarea>
+				<button type="submit">
+					Send
+				</button>
+			</form>
+		</div>
+
+	</section>
 }
 
-templ Message(message string, self bool){
-    <div class="border mb-4 px-4 py-2">
-        <div class="flex flex-end">{message}</div>
-    </div>
+templ Message(message string, self bool) {
+	<div class={ fmt.Sprintf("mb-4 px-4 py-2 flex %v", utils.CheckValue(self, "justify-end", "justify-start")) }>
+
+		<div class={ fmt.Sprintf("border px-4 py-2 rounded-lg %v", utils.CheckValue(self, "rounded-br-[0px]", "rounded-bl-[0px]")) }>
+			{ message }
+		</div>
+
+	</div>
 }
