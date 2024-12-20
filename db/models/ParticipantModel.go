@@ -12,7 +12,7 @@ type Participant struct {
     Id string `gorm:"primaryKey"`
     SocketUserId string
     ChatId string
-    lastSeen time.Time
+    LastSeen time.Time
 }
 
 func NewParticipant(userId, chatId string) *Participant{

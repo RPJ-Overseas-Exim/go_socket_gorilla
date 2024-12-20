@@ -4,6 +4,7 @@ import (
 	"RPJ_Overseas_Exim/go_mod_home/db/models"
 	"encoding/json"
 	"log"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -73,6 +74,7 @@ func (h *Hub) Run() {
 		case cp := <-h.unregister:
 			// log.Println("unregistering ", cp.userId)
 			h.dbConn.Model(&models.SocketUser{}).Where("id = ?", cp.userId).Update("Online", false)
+			h.dbConn.Model(&models.Participant{}).Where("socket_user_id = ?", cp.userId).Update("LastSeen", time.Now())
 
             if cp.role=="admin"{
                 delete(h.chats["adminTemp"].cp, cp)

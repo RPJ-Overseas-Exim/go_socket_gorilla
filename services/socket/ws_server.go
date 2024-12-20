@@ -63,6 +63,7 @@ func (c *ChatParticipant) readPump() {
         }
 
         message = bytes.TrimSpace(bytes.Replace(message, newLine, space, -1))
+        c.hub.dbConn.Model(&models.Chat{}).Where("id = ?", c.chatId).Update("LastMessageTime", time.Now())
 
         notification := NewNotification("reload", string(message), c.chatId, c.userId)
         c.hub.notification <- notification
@@ -151,7 +152,7 @@ func ServeAdminWs(userId string, hub *Hub, c echo.Context) (*ChatParticipant, er
 }
 
 func SwitchChats(cp *ChatParticipant, chatId string, hub *Hub){
-    log.Println("Admin ", cp)
+    // log.Println("Admin ", cp)
     chat, ok := hub.chats[chatId]
 
     if ok {

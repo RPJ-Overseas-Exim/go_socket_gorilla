@@ -22,4 +22,3 @@ func NewMessage(chatId , userId string, msg []byte) *Message{
         Message: string(msg),
     }
 }
-

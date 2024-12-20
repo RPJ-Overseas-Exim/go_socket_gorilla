@@ -19,8 +19,11 @@ func (cs *ChatService) GetAllChats() *[]db.ResultsType {
 	cs.dbConn.
         Table("socket_users").
 		InnerJoins("inner join participants on participants.socket_user_id = socket_users.id and socket_users.role <> ?", "admin").
+        InnerJoins("inner join chats on chats.id = participants.chat_id").
         Order("participants.chat_id").
 		Scan(&results)
+
+    // log.Println("participants: ", results)
 
 	return &results
 }

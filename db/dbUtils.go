@@ -3,6 +3,7 @@ package db
 import (
 	"RPJ_Overseas_Exim/go_mod_home/db/models"
 	"log"
+	"time"
 
 	"github.com/aidarkhanov/nanoid"
 	"gorm.io/gorm"
@@ -69,5 +70,7 @@ type ResultsType struct {
     Email, 
     ChatId string
     Online bool
+    LastSeen,
+    LastMessageTime time.Time
 }
 
