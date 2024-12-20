@@ -9,27 +9,26 @@ import (
 )
 
 type Hub struct {
-	notification chan *Notification
-    broadcast chan *models.Message
-	register, unregister    chan *ChatParticipant
-	chats                   map[string]*Chat
-	dbConn                  *gorm.DB
+	notification         chan *Notification
+	broadcast            chan *models.Message
+	register, unregister chan *ChatParticipant
+	chats                map[string]*Chat
+	dbConn               *gorm.DB
 }
 
 type Notification struct {
-    Event string `json:"event"`
-    Message string `json:"message"`
-    ChatId string 
+	Event   string `json:"event"`
+	Message string `json:"message"`
+	ChatId  string
 }
 
-func NewNotification(event, message, chatId string) *Notification{
-    return &Notification{
-        event,
-        message,
-        chatId,
-    }
+func NewNotification(event, message, chatId string) *Notification {
+	return &Notification{
+		event,
+		message,
+		chatId,
+	}
 }
-
 
 type Chat struct {
 	Id string
@@ -45,12 +44,12 @@ func NewChat(cp *ChatParticipant) *Chat {
 
 func NewHub(dbConn *gorm.DB) *Hub {
 	return &Hub{
-		broadcast:  make(chan *models.Message),
-		register:   make(chan *ChatParticipant),
-		unregister: make(chan *ChatParticipant),
-        notification: make(chan *Notification),
-		chats:      make(map[string]*Chat),
-		dbConn:     dbConn,
+		broadcast:    make(chan *models.Message),
+		register:     make(chan *ChatParticipant),
+		unregister:   make(chan *ChatParticipant),
+		notification: make(chan *Notification),
+		chats:        make(map[string]*Chat),
+		dbConn:       dbConn,
 	}
 }
 
@@ -84,27 +83,29 @@ func (h *Hub) Run() {
 			}
 
 		case notif := <-h.notification:
-            log.Println(notif)
+			log.Println("Notification: ", notif)
 			participants := h.chats[notif.ChatId].cp
 			for cp := range participants {
 				// log.Println(cp.userId)
-                notifMsg, err := json.Marshal(notif)
-                // log.Println("notif msg: ", notifMsg)
-                if err!=nil{
-                    log.Fatalln("Could not marshal the notification to a json")
-                }else{
-                    select {
-                    case cp.messages <- notifMsg:
-                    default:
-                        close(cp.messages)
-                        delete(h.chats[cp.chatId].cp, cp)
-                    }
-                }
+				notifMsg, err := json.Marshal(notif)
+				// log.Println("notif msg: ", notifMsg)
+				if err != nil {
+					log.Fatalln("Could not marshal the notification to a json")
+				} else {
+					select {
+					case cp.messages <- notifMsg:
+					default:
+						close(cp.messages)
+						delete(h.chats[cp.chatId].cp, cp)
+					}
+				}
 			}
 		case message := <-h.broadcast:
 			// log.Println("Message: ", message.userId, message.chatId)
 			// log.Println("Message ChatId: ", message.chatId)
 			participants := h.chats[message.ChatId].cp
+			adminMap := h.chats["adminTemp"].cp
+
 			dbMessage := models.NewMessage(message.ChatId, message.SocketUserId, []byte(message.Message))
 			err := h.dbConn.Create(&dbMessage)
 
@@ -112,13 +113,29 @@ func (h *Hub) Run() {
 				log.Fatalln("Could not create the message :[")
 			} else {
 				// log.Println("participant list")
+				adminFound := false
+
 				for cp := range participants {
 					// log.Println(cp.userId)
+					if cp.role == "admin" {
+						adminFound = true
+					}
 					select {
 					case cp.messages <- []byte(message.Message):
 					default:
 						close(cp.messages)
 						delete(h.chats[cp.chatId].cp, cp)
+					}
+				}
+
+				if !adminFound {
+					for admin := range adminMap {
+						select {
+						case admin.messages <- []byte(message.Message):
+						default:
+							close(admin.messages)
+							delete(h.chats[admin.chatId].cp, admin)
+						}
 					}
 				}
 				// log.Println("end")

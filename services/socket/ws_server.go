@@ -43,8 +43,8 @@ type ChatParticipant struct {
 
 func (c *ChatParticipant) readPump() {
     defer func(){
+        c.hub.notification <- NewNotification("offline", c.userId + " just left", c.chatId)
         c.hub.unregister <- c
-        c.hub.notification <- NewNotification("offline", c.userId + " just joined", c.chatId)
         c.conn.Close()
     }()
 
@@ -163,12 +163,20 @@ func SwitchChats(cp *ChatParticipant, chatId string, hub *Hub){
         }
 
         if !adminFound{
+            if cp.chatId !="adminTempl"{
+                delete(hub.chats[cp.chatId].cp, cp)
+            }
+
             cp.chatId = chatId
             chat.cp[cp] = true
         }
-
     }else{
+        if cp.chatId !="adminTempl"{
+            delete(hub.chats[cp.chatId].cp, cp)
+        }
         cp.chatId = chatId
         hub.chats[cp.chatId] = NewChat(cp)
     }
 }
+
+
