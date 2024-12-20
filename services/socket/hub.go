@@ -79,10 +79,12 @@ func (h *Hub) Run() {
 				if ok {
 					delete(h.chats[cp.chatId].cp, cp)
 				}
+
 				close(cp.messages)
 			}
 
 		case notif := <-h.notification:
+            log.Println(notif)
 			participants := h.chats[notif.ChatId].cp
 			for cp := range participants {
 				// log.Println(cp.userId)

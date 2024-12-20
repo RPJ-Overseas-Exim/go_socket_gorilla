@@ -37,7 +37,8 @@ function connectToSocket() {
             item.textContent = "\n" + messages;
             appendLog(item);
         };
-    } else {
+
+   } else {
         var item = document.createElement("div");
         item.textContent = "<b>Your browser does not support WebSockets.</b>";
         appendLog(item);

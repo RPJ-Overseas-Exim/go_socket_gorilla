@@ -3,7 +3,7 @@ package services
 import (
 	"RPJ_Overseas_Exim/go_mod_home/db"
 	"RPJ_Overseas_Exim/go_mod_home/db/models"
-	"log"
+	// "log"
 
 	"gorm.io/gorm"
 )
@@ -29,12 +29,12 @@ func (cs *ChatService) GetChatAndUserId(email string) (string, string) {
 
 	var participant models.Participant
 
-	log.Println("Email: ", email)
+	// log.Println("Email: ", email)
 	cs.dbConn.Model(&models.Participant{}).
 		InnerJoins("inner join socket_users on participants.socket_user_id = socket_users.id and socket_users.email = ?", email).
 		First(&participant)
 
-	log.Println("participant: ", participant)
+	// log.Println("participant: ", participant)
 	if participant.ChatId != "" {
 		return participant.ChatId, participant.SocketUserId
 	} else {
