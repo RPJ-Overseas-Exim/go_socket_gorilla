@@ -74,7 +74,7 @@ func SetupRoutes(e *echo.Echo, hub *socket.Hub, mh *MessageHandler, ch *ChatHand
         socket.SwitchChats(adminHash[adminId], chatId, hub)
         // log.Println("Chat after ", *adminHash[adminId])
 
-        chatView := admin_views.Chat("Chat heading", msgs, adminId)
+        chatView := admin_views.Chat("Chat heading", msgs, adminId, chatId)
         return renderView(c, http.StatusOK, chatView)
     })
 }

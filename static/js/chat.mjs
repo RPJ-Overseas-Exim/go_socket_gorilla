@@ -24,12 +24,33 @@ function connectToSocket() {
 
         try{
             data = JSON.parse(msg.data)
+            const chat = document.querySelector(`[data-chatId=${data?.ChatId}]`)
+            //console.log("for chat Id: ", chat)
+
+            if(chat){
+                const indicator = chat.querySelector(".online-indicator")
+                //console.log(indicator)
+
+                if(data?.event === "online"){
+                    // make the indicator visible
+                    console.log("online event")
+                    indicator.classList.remove("hidden")
+                }
+                if(data?.event === "offline"){
+                    // make the indicator invisible
+                    console.log("offline event")
+                    indicator.classList.add("hidden")
+                }
+                if(data?.event === "reload"){
+                    // show the new message
+                    const currentChat = document.getElementById("#message-chatId")
+                    console.log("reload event: ", currentChat.dataset.chatId)
+                }
+            }
+
+            return // exit 
         }catch(err){
             data = msg.data
-        }
-
-        if(typeof data == "object"){
-            return appendMessage(data.message, false)
         }
 
         appendMessage(data, false)
