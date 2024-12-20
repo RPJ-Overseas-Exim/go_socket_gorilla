@@ -70,7 +70,6 @@ type ResultsType struct {
     Email, 
     ChatId string
     Online bool
-    LastSeen,
     LastMessageTime time.Time
 }
 

@@ -5,14 +5,15 @@ import (
 	"RPJ_Overseas_Exim/go_mod_home/views/live_chat/layout"
 	"RPJ_Overseas_Exim/go_mod_home/utils"
 	"fmt"
+	"time"
 )
 
-templ AdminHome(chats *[]db.ResultsType) {
+templ AdminHome(chats *[]db.ResultsType, seenMap *map[string]time.Time) {
 	@layout.Base() {
 		<main class="flex h-dvh">
 			<section id="chat-list" class="w-1/4 max-w-[300px] border-r border-border h-full">
 				<h1 class="text-xl px-4 py-2 font-bold">Chats</h1>
-				@chatList(chats)
+				@chatList(chats, seenMap)
 			</section>
 
 			<div class="w-11/12 h-full">
@@ -23,7 +24,7 @@ templ AdminHome(chats *[]db.ResultsType) {
 	}
 }
 
-templ chatList(chats *[]db.ResultsType) {
+templ chatList(chats *[]db.ResultsType, seenMap *map[string]time.Time) {
 	for _,chat := range *chats {
 		<div
 			class="chat-button p-4 hover:bg-muted flex justify-between items-center gap-4 cursor-pointer"

@@ -25,8 +25,8 @@ func NewAdminHandler(as AdminServices, cs chatService, ms MessageService) *Admin
 }
 
 func (ah *AdminHandler) adminView(c echo.Context) error {
-    users := ah.cs.GetAllChats() 
+    users, seenMap := ah.cs.GetAllChats() 
 
-    return renderView(c, 200, admin_views.AdminHome(users))
+    return renderView(c, 200, admin_views.AdminHome(users,seenMap))
 }
 

@@ -168,6 +168,7 @@ func SwitchChats(cp *ChatParticipant, chatId string, hub *Hub){
             if cp.chatId !="adminTempl"{
                 delete(hub.chats[cp.chatId].cp, cp)
             }
+			cp.hub.dbConn.Model(&models.Participant{}).Where("socket_user_id = ?", cp.userId).Update("LastSeen", time.Now())
 
             cp.chatId = chatId
             chat.cp[cp] = true
