@@ -72,6 +72,9 @@ func (h *Hub) Run() {
 			// log.Println("unregistering ", cp.userId)
 			h.dbConn.Model(&models.SocketUser{}).Where("id = ?", cp.userId).Update("Online", false)
 
+            if cp.role=="admin"{
+                delete(h.chats["adminTemp"].cp, cp)
+            }
 			if _, ok := h.chats[cp.chatId].cp[cp]; ok {
 				_, ok := h.chats[cp.chatId].cp[cp]
 
@@ -85,8 +88,13 @@ func (h *Hub) Run() {
 		case notif := <-h.notification:
 			log.Println("Notification: ", notif)
 			participants := h.chats[notif.ChatId].cp
+			adminMap := h.chats["adminTemp"].cp
+			adminFound := false
 			for cp := range participants {
 				// log.Println(cp.userId)
+				if cp.role == "admin" {
+					adminFound = true
+				}
 				notifMsg, err := json.Marshal(notif)
 				// log.Println("notif msg: ", notifMsg)
 				if err != nil {
@@ -100,11 +108,33 @@ func (h *Hub) Run() {
 					}
 				}
 			}
+
+			log.Println(adminFound)
+
+			if !adminFound {
+				for cp := range adminMap {
+					// log.Println(cp.userId)
+					if cp.role == "admin" {
+						adminFound = true
+					}
+					notifMsg, err := json.Marshal(notif)
+					// log.Println("notif msg: ", notifMsg)
+					if err != nil {
+						log.Fatalln("Could not marshal the notification to a json")
+					} else {
+						select {
+						case cp.messages <- notifMsg:
+						default:
+							close(cp.messages)
+							delete(h.chats[cp.chatId].cp, cp)
+						}
+					}
+				}
+			}
 		case message := <-h.broadcast:
 			// log.Println("Message: ", message.userId, message.chatId)
 			// log.Println("Message ChatId: ", message.chatId)
 			participants := h.chats[message.ChatId].cp
-			adminMap := h.chats["adminTemp"].cp
 
 			dbMessage := models.NewMessage(message.ChatId, message.SocketUserId, []byte(message.Message))
 			err := h.dbConn.Create(&dbMessage)
@@ -113,29 +143,14 @@ func (h *Hub) Run() {
 				log.Fatalln("Could not create the message :[")
 			} else {
 				// log.Println("participant list")
-				adminFound := false
 
 				for cp := range participants {
 					// log.Println(cp.userId)
-					if cp.role == "admin" {
-						adminFound = true
-					}
 					select {
 					case cp.messages <- []byte(message.Message):
 					default:
 						close(cp.messages)
 						delete(h.chats[cp.chatId].cp, cp)
-					}
-				}
-
-				if !adminFound {
-					for admin := range adminMap {
-						select {
-						case admin.messages <- []byte(message.Message):
-						default:
-							close(admin.messages)
-							delete(h.chats[admin.chatId].cp, admin)
-						}
 					}
 				}
 				// log.Println("end")

@@ -151,6 +151,7 @@ func ServeAdminWs(userId string, hub *Hub, c echo.Context) (*ChatParticipant, er
 }
 
 func SwitchChats(cp *ChatParticipant, chatId string, hub *Hub){
+    log.Println("Admin ", cp)
     chat, ok := hub.chats[chatId]
 
     if ok {
@@ -170,8 +171,9 @@ func SwitchChats(cp *ChatParticipant, chatId string, hub *Hub){
             cp.chatId = chatId
             chat.cp[cp] = true
         }
+
     }else{
-        if cp.chatId !="adminTempl"{
+        if cp.chatId !="adminTemp"{
             delete(hub.chats[cp.chatId].cp, cp)
         }
         cp.chatId = chatId
