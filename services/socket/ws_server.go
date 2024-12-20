@@ -43,7 +43,7 @@ type ChatParticipant struct {
 
 func (c *ChatParticipant) readPump() {
     defer func(){
-        c.hub.notification <- NewNotification("offline", c.userId + " just left", c.chatId)
+        c.hub.notification <- NewNotification("offline", c.userId + " just left", c.chatId, c.userId)
         c.hub.unregister <- c
         c.conn.Close()
     }()
@@ -64,7 +64,7 @@ func (c *ChatParticipant) readPump() {
 
         message = bytes.TrimSpace(bytes.Replace(message, newLine, space, -1))
 
-        notification := NewNotification("reload", string(message), c.chatId)
+        notification := NewNotification("reload", string(message), c.chatId, c.userId)
         c.hub.notification <- notification
         log.Println("Message ", string(message))
         c.hub.broadcast <- models.NewMessage(c.chatId, c.userId, message)
@@ -125,7 +125,7 @@ func ServeWs(chatId string, userId string, hub *Hub, c echo.Context){
     // log.Println("Participant chat id: ", cp.chatId)
 
     cp.hub.register <- cp
-    cp.hub.notification <- NewNotification("online", cp.userId + " just joined", cp.chatId)
+    cp.hub.notification <- NewNotification("online", cp.userId + " just joined", cp.chatId, cp.userId)
 
     go cp.writePump()
     go cp.readPump()
@@ -143,7 +143,7 @@ func ServeAdminWs(userId string, hub *Hub, c echo.Context) (*ChatParticipant, er
     cp = &ChatParticipant{chatId: "adminTemp", userId: userId, hub: hub, conn: conn, messages: make(chan []byte, 256), role: "admin"}
 
     cp.hub.register <- cp
-    cp.hub.notification <- NewNotification("online", cp.userId + " just joined", cp.chatId)
+    cp.hub.notification <- NewNotification("online", cp.userId + " just joined", cp.chatId, cp.userId)
 
     go cp.writePump()
     go cp.readPump()

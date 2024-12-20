@@ -20,13 +20,15 @@ type Notification struct {
 	Event   string `json:"event"`
 	Message string `json:"message"`
 	ChatId  string
+    UserId string
 }
 
-func NewNotification(event, message, chatId string) *Notification {
+func NewNotification(event, message, chatId, userId string) *Notification {
 	return &Notification{
 		event,
 		message,
 		chatId,
+        userId,
 	}
 }
 
@@ -95,6 +97,9 @@ func (h *Hub) Run() {
 				if cp.role == "admin" {
 					adminFound = true
 				}
+                if cp.userId==notif.UserId{
+                    continue
+                }
 				notifMsg, err := json.Marshal(notif)
 				// log.Println("notif msg: ", notifMsg)
 				if err != nil {
