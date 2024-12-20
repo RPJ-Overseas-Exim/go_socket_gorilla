@@ -18,6 +18,24 @@ function connectToSocket() {
         console.log("socket disconnected")
     }
 
+    conn.onmessage = function(msg){
+        console.log(msg.data)
+        let data
+
+        try{
+            data = JSON.parse(msg.data)
+        }catch(err){
+            data = msg.data
+        }
+
+        if(typeof data == "object"){
+            return appendMessage(data.message, false)
+        }
+
+        appendMessage(data, false)
+    }
+
+
     return conn
 }
 
@@ -33,7 +51,7 @@ function sendMessage(conn){
             
             if(dataObject?.message.length > 0){
                 conn.send(dataObject.message)
-                appendMessage(dataObject.message)
+                appendMessage(dataObject.message, true)
             }
 
             messageInput.value = ""
@@ -41,12 +59,12 @@ function sendMessage(conn){
     }
 }
 
-function appendMessage(msg){
+function appendMessage(msg, admin){
 
     const messageBox = document.createElement("div")
-    messageBox.className = "pb-4 px-4 flex justify-end"
+    messageBox.className = `pb-4 px-4 flex ${admin ? "justify-end" : "justify-start"}`
     const message = document.createElement("div")
-    message.className = "border border-border px-4 py-1 rounded-lg rounded-br-[0px]"
+    message.className = `border border-border px-4 py-1 rounded-lg ${admin ? "rounded-br-[0px]" : "rounded-bl-[0px]"}`
     message.innerText = msg
     messageBox.appendChild(message)
 
@@ -62,7 +80,10 @@ if( location.pathname === "/admin"){
 
     document.addEventListener("htmx:afterRequest", function (e){
         if(e.detail.target.id == "chat-messages"){
+            const messages = document.querySelector("#messages")
+
             sendMessage(conn)
+            messages.scrollTo({top: messages.scrollHeight, behavior: "smooth"})
         }
     })
 }
