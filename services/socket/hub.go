@@ -19,7 +19,7 @@ type Hub struct {
 type Notification struct {
     Event string `json:"event"`
     Message string `json:"message"`
-    ChatId string
+    ChatId string   `json:"chatId"`
 }
 
 func NewReloadNotification(message string, chatId string) *Notification{
@@ -47,6 +47,7 @@ func NewHub(dbConn *gorm.DB) *Hub {
 		broadcast:  make(chan *models.Message),
 		register:   make(chan *ChatParticipant),
 		unregister: make(chan *ChatParticipant),
+        notification: make(chan *Notification),
 		chats:      make(map[string]*Chat),
 		dbConn:     dbConn,
 	}
@@ -82,23 +83,20 @@ func (h *Hub) Run() {
 
 		case notif := <-h.notification:
 			participants := h.chats[notif.ChatId].cp
-			// log.Println("participant list")
 			for cp := range participants {
 				// log.Println(cp.userId)
                 notifMsg, err := json.Marshal(notif)
-                log.Println("notif msg: ", notifMsg)
+                // log.Println("notif msg: ", notifMsg)
                 if err!=nil{
                     log.Fatalln("Could not marshal the notification to a json")
-                    break
+                }else{
+                    select {
+                    case cp.messages <- notifMsg:
+                    default:
+                        close(cp.messages)
+                        delete(h.chats[cp.chatId].cp, cp)
+                    }
                 }
-
-				select {
-				case cp.messages <- notifMsg:
-				default:
-					close(cp.messages)
-					delete(h.chats[cp.chatId].cp, cp)
-				}
-				// log.Println("end")
 			}
 		case message := <-h.broadcast:
 			// log.Println("Message: ", message.userId, message.chatId)

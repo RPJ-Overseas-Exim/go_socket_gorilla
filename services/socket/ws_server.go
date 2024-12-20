@@ -62,10 +62,12 @@ func (c *ChatParticipant) readPump() {
         }
 
         message = bytes.TrimSpace(bytes.Replace(message, newLine, space, -1))
+
         notification := NewReloadNotification(string(message), c.chatId)
         c.hub.notification <- notification
         c.hub.broadcast <- models.NewMessage(c.chatId, c.userId, message)
     }
+    log.Println("read pump dead")
 }
 
 func (c *ChatParticipant) writePump(){
