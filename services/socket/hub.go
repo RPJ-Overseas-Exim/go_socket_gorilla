@@ -19,16 +19,17 @@ type Hub struct {
 type Notification struct {
     Event string `json:"event"`
     Message string `json:"message"`
-    ChatId string   `json:"chatId"`
+    ChatId string 
 }
 
-func NewReloadNotification(message string, chatId string) *Notification{
+func NewNotification(event, message, chatId string) *Notification{
     return &Notification{
-        "reload",
+        event,
         message,
         chatId,
     }
 }
+
 
 type Chat struct {
 	Id string
