@@ -12,14 +12,14 @@ type ChatService struct {
 	dbConn *gorm.DB
 }
 
-
 func (cs *ChatService) GetAllChats() *[]db.ResultsType {
 
     var results []db.ResultsType;
 
 	cs.dbConn.
         Table("socket_users").
-		InnerJoins("inner join participants on participants.socket_user_id = socket_users.id").
+		InnerJoins("inner join participants on participants.socket_user_id = socket_users.id and socket_users.role <> ?", "admin").
+        Order("participants.chat_id").
 		Scan(&results)
 
 	return &results

@@ -1,6 +1,8 @@
 package socket
 
 import (
+	"RPJ_Overseas_Exim/go_mod_home/db/models"
+	"RPJ_Overseas_Exim/go_mod_home/utils"
 	"bytes"
 	"log"
 	"time"
@@ -61,7 +63,7 @@ func (c *ChatParticipant) readPump() {
 
         message = bytes.TrimSpace(bytes.Replace(message, newLine, space, -1))
 
-        c.hub.broadcast <- NewMessage(c.chatId, c.userId, message)
+        c.hub.broadcast <- models.NewMessage(c.chatId, c.userId, message)
     }
 }
 
@@ -123,18 +125,43 @@ func ServeWs(chatId string, userId string, hub *Hub, c echo.Context){
     go cp.readPump()
 }
  
-func ServeAdminWs(userId string, hub *Hub, c echo.Context){
+func ServeAdminWs(userId string, hub *Hub, c echo.Context) (*ChatParticipant, error){
     conn, err := upgrader.Upgrade(c.Response() , c.Request(), nil)
 
+    var cp *ChatParticipant
     if err != nil{
         log.Println(err)
-        return
+        return cp, &utils.HTTPException{Message:"Could not upgrade socket connection"}
     }
 
-    cp := &ChatParticipant{chatId: "adminTemp", userId: userId, hub: hub, conn: conn, messages: make(chan []byte, 256), role: "admin"}
+    cp = &ChatParticipant{chatId: "adminTemp", userId: userId, hub: hub, conn: conn, messages: make(chan []byte, 256), role: "admin"}
 
     cp.hub.register <- cp
 
     go cp.writePump()
     go cp.readPump()
+    return cp,nil
+}
+
+func SwitchChats(cp *ChatParticipant, chatId string, hub *Hub){
+    chat, ok := hub.chats[chatId]
+
+    if ok {
+        adminFound := false
+        for k := range chat.cp{
+            if k.role == "admin"{
+                k.chatId = chatId
+                adminFound = true
+            }
+        }
+
+        if !adminFound{
+            cp.chatId = chatId
+            chat.cp[cp] = true
+        }
+
+    }else{
+        cp.chatId = chatId
+        hub.chats[cp.chatId] = NewChat(cp)
+    }
 }

@@ -1,6 +1,10 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"RPJ_Overseas_Exim/go_mod_home/utils"
+
+	"gorm.io/gorm"
+)
 
 type Message struct{
     gorm.Model
@@ -9,3 +13,13 @@ type Message struct{
     ChatId string
     Message string
 }
+
+func NewMessage(chatId , userId string, msg []byte) *Message{
+    return &Message{
+        Id:*utils.GenNanoid(),
+        SocketUserId: userId,
+        ChatId: chatId,
+        Message: string(msg),
+    }
+}
+

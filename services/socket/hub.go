@@ -8,22 +8,8 @@ import (
 )
 
 
-type Message struct {
-    chatId,
-    userId string
-    msg []byte
-}
-
-func NewMessage(chatId , userId string, msg []byte) *Message{
-    return &Message{
-        chatId,
-        userId, 
-        msg,
-    }
-}
-
 type Hub struct {
-    broadcast chan *Message
+    broadcast chan *models.Message
     register chan *ChatParticipant
     unregister chan *ChatParticipant
     chats map[string] *Chat
@@ -44,7 +30,7 @@ func NewChat(cp *ChatParticipant) *Chat{
 
 func NewHub(dbConn *gorm.DB) *Hub {
     return &Hub{
-        broadcast: make(chan *Message),
+        broadcast: make(chan *models.Message),
         register: make(chan *ChatParticipant),
         unregister: make(chan *ChatParticipant),
         chats: make(map[string] *Chat),
@@ -60,6 +46,7 @@ func (h *Hub) Run(){
             _, ok := h.chats[cp.chatId] 
 
             h.dbConn.Model(&models.SocketUser{}).Where("id = ?", cp.userId).Update("Online", true)
+
             if !ok {
                 h.chats[cp.chatId] = NewChat(cp)
             }else{
@@ -82,8 +69,8 @@ func (h *Hub) Run(){
         case message := <-h.broadcast:
             // log.Println("Message: ", message.userId, message.chatId)
             // log.Println("Message ChatId: ", message.chatId)
-            participants := h.chats[message.chatId].cp
-            dbMessage := NewMessage(message.chatId,message.userId, message.msg)
+            participants := h.chats[message.ChatId].cp
+            dbMessage := models.NewMessage(message.ChatId,message.SocketUserId, []byte(message.Message))
             err := h.dbConn.Create(&dbMessage)
 
             if err.Error!=nil{
@@ -93,7 +80,7 @@ func (h *Hub) Run(){
                 for cp := range participants{
                     // log.Println(cp.userId)
                     select {
-                    case cp.messages <- message.msg:
+                    case cp.messages <- []byte(message.Message):
                     default:
                         close(cp.messages)
                         delete(h.chats[cp.chatId].cp,cp)
